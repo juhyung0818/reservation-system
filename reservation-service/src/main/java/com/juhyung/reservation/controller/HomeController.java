@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class HomeController {
 	
 	@GetMapping
-	public String list() throws Exception {
+	public String mainpage() throws Exception {
 		return "mainpage";
 	}
 }

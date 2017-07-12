@@ -137,8 +137,8 @@
     <script>
     
     $(document).ready(function() {
-    	list_promotion();
-		list_category();
+    	list_category();
+    	list_product();
     	get_count();
     	
 	//category를 이동 했을 때 page는 초기화하고 그려놓은 product들을 삭제한다.
@@ -158,7 +158,7 @@
 	});
 	
 	//더 보기를 하였을 때 page를 1증가 시키고 해당 category의 product를 10개 더 불러온다.
-	$(document).on("click", "div.more", function(event){
+	function click_product(){
 		var id = $('a.anchor.active').closest(".item").data('category');
 		page++;
 		if(id == 0){
@@ -166,8 +166,17 @@
 		}else{
 	 		product_list_by_category(id);
 		}
+	}
+	
+	$(document).on("click", "div.more", function(event){
+		click_product();
 	});
 	
+	$(document).scroll(function(event){
+		if($(window).scrollTop() >= $(document).height() - $(window).height()){
+			click_product();
+		}
+	})
 });
 </script>
 
