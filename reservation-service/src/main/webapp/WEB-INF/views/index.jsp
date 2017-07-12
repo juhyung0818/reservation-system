@@ -38,19 +38,16 @@
 			<c:forEach items="${categories}" var="categoryVO">
 				<tr class="category" id="${categoryVO.id}">
 					<td>${categoryVO.id}</td>
-					<td>${categoryVO.name}</td>
+					<td class ='old-name'>${categoryVO.name}</td>
 					<td>
-						<form action="/category/modify" method="post" >
+						<div class="update">
 							<div>
-								<input type="hidden" name="id" value="${categoryVO.id}">
-							</div>
-							<div>
-								<input type="text" name="name" placeholder="NEW NAME"><br>
+								<input type="text" class="new-name" placeholder="NEW NAME"><br>
 							</div>
 							<div class="button">
-								<button value="수정" name="newName"class="modify">MODIFY</button>
+								<button value="수정" class="modify">MODIFY</button>
 							</div>
-						</form>
+						</div>
 					</td>
 					<td>
 						<div class="button">
@@ -68,10 +65,54 @@
 
 <script>
 $(function(){
+	/* 삭제부분 */
+	function remove_category_view(view, id) {
+		view.remove();
+	}
+
+	function remove_category(view, id, callback) { 
+		$.ajax({
+			type:'delete',
+			url:'/rest/category/' + id,
+			success:function() {
+				callback(view, id);
+			}
+		});
+	}
 	$(document).on("click", ".destory", function(event){
 		var view = $(event.target).closest('.category');
 		var id = view.attr('id');
 		remove_category(view, id, remove_category_view);
 	});
+	
+	
+	/* 수정 부분 */
+	function modify_category_view(view, newName, id) {
+		view.find('.old-name').html(newName);
+		view.find('.new-name').val("");
+	}
+
+	function modify_category(view, id, name, callback) { 
+		var data =JSON.stringify({
+				id : id,
+				name : name
+		});
+		$.ajax({
+			type:'put',
+			url:'/rest/category/' + id,
+			contentType: "application/json; charset=utf-8",
+			data:data,
+			success:function() {
+				 modify_category_view(view, name);
+			}
+		});
+	}
+	$(document).on("click", ".modify", function(event){
+		var view = $(event.target).closest('.category');
+		var newName = view.find('.new-name').val();
+		var id = view.attr('id');
+		modify_category(view, id, newName);
+	});
+	
 });
  </script>
