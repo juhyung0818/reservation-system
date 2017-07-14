@@ -12,4 +12,9 @@ public class HomeController {
 	public String mainpage() throws Exception {
 		return "mainpage";
 	}
+	
+	@GetMapping("/admin")
+	public String categoryEdit() throws Exception {
+		return "index";
+	}
 }

@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -29,18 +30,13 @@ public class CategoryController {
 		return categoryService.getCategoryListAll();
 	}
 	
-	@PostMapping("/create")
-	public void create(@RequestParam("name") String name){
+	@PostMapping
+	public void create(@RequestBody String name){
 		CategoryVO category = new CategoryVO();
 		category.setName(name);
 		categoryService.create(category);
 	}
 	
-	@PostMapping("/remove")
-	public void remove(@RequestParam("id") Integer id) {
-		categoryService.removeById(id);
-	}
-
 	//RESTFul
 	@DeleteMapping("/{id}")
 	public void delete(@PathVariable("id") Integer id) {
@@ -49,9 +45,10 @@ public class CategoryController {
 	
 	@PutMapping("/{id}")
 	public void modify(@PathVariable("id") Integer id,
-			@ModelAttribute("CategoryVO") CategoryVO category) {
+			@RequestBody String name) {
+		CategoryVO category = new CategoryVO();
 		category.setId(id);
-		System.out.println(category.toString()); //log
+		category.setName(name);
 		categoryService.modifyById(category);
 	}
 	

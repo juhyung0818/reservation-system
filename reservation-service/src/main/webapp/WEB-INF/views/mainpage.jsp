@@ -1,4 +1,3 @@
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ page session="false"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
@@ -7,6 +6,7 @@
 
 <head>
 	<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+	<script src="/resources/js/handlebars-v4.0.10.js"></script>
     <meta charset="utf-8">
     <meta name="description" content="네이버 예약, 네이버 예약이 연동된 곳 어디서나 바로 예약하고, 네이버 예약 홈(나의예약)에서 모두 관리할 수 있습니다.">
     <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no">
@@ -113,7 +113,7 @@
                        <!--  -->
                     </ul>
                     <!-- 더보기 -->
-                    <div class="more">
+                    <div class="more" id="more">
                         <button class="btn"><span>더보기</span></button>
                     </div>
                 </div>
@@ -131,53 +131,253 @@
     </footer>
     
     <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.1.1.min.js"> </script>
-	<script src="/resources/js/background.js"></script>
-    <script src="/resources/js/product.js"></script>
     <script src="/resources/js/category.js"></script>
+    <script src="/resources/js/product.js"></script>
+	<script src="/resources/js/background.js"></script>
     <script>
     
-    $(document).ready(function() {
-    	list_category();
-    	list_product();
-    	get_count();
-    	
-	//category를 이동 했을 때 page는 초기화하고 그려놓은 product들을 삭제한다.
-	$(document).on("click", "a.anchor", function(event){
-		var id = $(event.target).closest(".item").data('category');
-		$('a.anchor').removeClass('active');
-		$(event.target).closest('a.anchor').addClass('active');
-		$('#productLeftList').empty();
-		$('#productRightList').empty();
-
-		page = 1;
-		if(id == 0){
-			list_product();
-		}else{
-	 		product_list_by_category(id);
-		}
+	$(document).on("click", "div.more", function(){
+		product.click_more();
 	});
 	
-	//더 보기를 하였을 때 page를 1증가 시키고 해당 category의 product를 10개 더 불러온다.
-	function click_product(){
-		var id = $('a.anchor.active').closest(".item").data('category');
-		page++;
-		if(id == 0){
-			list_product();
-		}else{
-	 		product_list_by_category(id);
-		}
-	}
-	
-	$(document).on("click", "div.more", function(event){
-		click_product();
-	});
-	
-	$(document).scroll(function(event){
+	$(document).scroll(function(){
 		if($(window).scrollTop() >= $(document).height() - $(window).height()){
-			click_product();
+			product.click_more();
 		}
 	})
-});
+	//category
+	var category = (function(){
+		
+		//private	
+		/* list */
+		draw_view = function(categoryVO){
+				var str = '<li class="item" data-category="0"> <a class="anchor active"> <span>전체</span> </a> </li>';
+					var source = $("#category-template").html(); 
+					//핸들바 템플릿 컴파일
+					var template = Handlebars.compile(source); 
+				for ( var index in categoryVO) {
+					str += template(categoryVO[index]);
+				}
+				$('#categoryList').html(str);
+		};
+		
+		draw_admin_view = function (categoryVO) {
+			var str = '<li class="item" data-category="0"> <a class="anchor active"> <span>전체</span> </a> </li>';
+			for ( var index in categoryVO) {
+				str += '<li class="item" data-category="' + categoryVO[index].id + '">' +
+						'<span class="old-name">'+ categoryVO[index].name + '</span>' +
+						'<input type="text" class="new-name" placeholder="NEW NAME"> ' +
+						'<button value="수정" class="modify">MODIFY</button> ' +
+						'<button value="삭제" class="destory"> REMOVE </button>' +
+						'</li>';
+			} 
+			$('#categoryList').append(str);
+		};
+		
+		get_list = function (callback) {
+			$.ajax({
+				type : 'get',
+				url : '/category',
+				success:function(result) {
+					callback(result);
+				}
+			});
+		};
+		
+		/* 삭제 부분 */
+		remove_view = function (view, id) {
+			view.remove();
+		};
+
+		remove = function (view, id, callback) { 
+			$.ajax({
+				type:'delete',
+				url:'/category/' + id,
+				success:function() {
+					callback(view, id);
+				}
+			});
+		};
+		
+		/* 수정 부분 */
+		modify_view = function (view, newName, id) {
+			view.find('.old-name').html(newName);
+			view.find('.new-name').val("");
+		};
+
+		modify = function (view, id, name, callback) { 
+			$.ajax({
+				type:'put',
+				url:'/category/' + id,
+				contentType: "application/json; charset=utf-8",
+				data:name,
+				success:function() {
+					callback(view, name);
+				}
+			});
+		};
+		/* 등록 부분 */
+		register = function (view, name, callback){
+			$.ajax({
+				type:'post',
+				url:'/category',
+				contentType: "application/json; charset=utf-8",
+				data:name,
+				success:function() {
+					callback(name);
+				}
+			});
+		};
+		new_view = function (name){
+			$('#categoryList').html("");
+			get_list(draw_view);
+		};
+
+		//public
+		return{
+			get: function () {
+				get_list(draw_view);
+			},
+			
+			remove: function(event){
+				var view = $(event.target).closest('.item');
+				var id = view.data('category');
+				remove(view, id, remove_view);
+			},
+			modify: function(event){
+				var view = $(event.target).closest('.item');
+				var newName = view.find('.new-name').val();
+				var id = view.data('category');
+				console.log(id);
+				modify(view, id, newName);
+			},
+			register: function(event){
+				var view = $(event.target).closest('#addCategory');
+				var name = view.find('.name').val();
+				register(view, name, new_view);
+			}
+		}
+	})();
+	category.get();
+	
+	
+	var product = (function(){
+		
+		//private
+		var page = 1;
+		
+		/* 상품 */
+		draw_view = function (productDTO) {
+			var str = '';
+			var source = $("#product-template").html(); 
+			//핸들바 템플릿 컴파일
+			var template = Handlebars.compile(source); 
+ 			for (var index in productDTO) {
+				str = template(productDTO[index]);
+				if (index % 2 == 0) {
+					$('#productLeftList').append(str);
+				} else {
+					$('#productRightList').append(str);
+				}
+				str = '';
+			}
+		};
+		
+		get_list = function (callback) {
+			$.ajax({
+				type : 'get',
+				url : '/product/'+ page,
+				success : function(result) {
+					callback(result);
+				}
+			});
+		};
+
+		get_list_by_category = function (id, callback) {
+			$.ajax({
+				type : 'get',
+				url : '/product/categories/' + id +'/' + page,
+				success : function(result) {
+					callback(result);
+				}
+			});
+		};
+
+		//public
+		return{
+			get: function() {
+				get_list(draw_view);
+			},
+
+			list_by_category: function (id) {
+				get_list_by_category(id, draw_view);
+			},
+			get_page: function(){
+				return page;
+			},
+			init_page: function(){
+				page = 1;
+			},
+			click_more: function (){
+				var id = $('a.anchor.active').closest(".item").data('category');
+					page++;
+				if(id == 0){
+					product.get();
+				}else{
+					product.list_by_category(id);
+				}
+			},
+			//category를 이동 했을 때 page는 초기화하고 그려놓은 product들을 삭제한다.
+			move: function(event){
+				var id = $(event.target).closest(".item").data('category');
+			 	$('a.anchor').removeClass('active');
+				$(event.target).closest('a.anchor').addClass('active');
+				
+				$('#productLeftList').empty();
+				$('#productRightList').empty();
+				product.init_page();
+				console.log(product.get_page());
+				if(id == 0){
+					product.get();
+				}else{
+			 		product.list_by_category(id);
+				}
+			}
+		}
+	})();
+	
+	product.get();	
+	$(document).on("click", "a.anchor", product.move);
+	
+	get_count(); 
+	
+
+
+</script>
+<script id="product-template" type="text/x-handlebars-template">
+	<li class="item">
+		<a href="#" class="item_book">
+			<div class="item_preview">
+				<img alt={{name}} class="img_thumb" 
+				src="resources/img/temp_product/{{id}}.png">
+				<span class="img_border"></span>
+			</div>
+			<div class="event_txt">
+				<h4 class="event_txt_tit"> 
+				<span> {{event}} </span>
+					<small class="sm"> {{placeName}} {{placeLot}} {{placeStreet}}
+					</small>
+				</h4>
+				<p class="event_txt_dsc"> {{description}} </p>
+			</div>
+		</a>
+	</li>
+</script>
+
+<script id="category-template" type="text/x-handlebars-template">
+	<li class="item" data-category="{{id}}"> 
+		<a class="anchor"> <span> {{name}} </span> </a>
+	</li>
 </script>
 
 </body>
