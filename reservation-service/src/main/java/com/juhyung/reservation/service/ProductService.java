@@ -4,13 +4,15 @@ import java.util.List;
 
 import com.juhyung.reservation.domain.PageCriteria;
 import com.juhyung.reservation.domain.ProductVO;
+import com.juhyung.reservation.dto.DetailProduct;
 import com.juhyung.reservation.dto.ProductDTO;
 
 public interface ProductService {
 
 	public List<ProductDTO> getListPage(PageCriteria pageCriteria);
-	public List<ProductVO> getListByCategory(Integer categoryId, PageCriteria pageCriteria);
-	public ProductDTO detailProductById(Integer id);
+	public List<ProductDTO> getListByCategory(Integer categoryId, PageCriteria pageCriteria);
 	public Integer getCountSaleProduct();
+	public Integer getCountSaleProductByCategory(int id);
 	public List<ProductVO> getListPromotion();
+	public DetailProduct getDetailProductById(Integer id);
 }

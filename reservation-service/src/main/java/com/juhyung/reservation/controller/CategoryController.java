@@ -19,7 +19,7 @@ import com.juhyung.reservation.domain.CategoryVO;
 import com.juhyung.reservation.service.CategoryService;
 
 @RestController
-@RequestMapping("/category")
+@RequestMapping("/api/category")
 public class CategoryController {
 
 	@Autowired
@@ -44,8 +44,7 @@ public class CategoryController {
 	}
 	
 	@PutMapping("/{id}")
-	public void modify(@PathVariable("id") Integer id,
-			@RequestBody String name) {
+	public void modify(@PathVariable("id") Integer id, @RequestBody String name) {
 		CategoryVO category = new CategoryVO();
 		category.setId(id);
 		category.setName(name);

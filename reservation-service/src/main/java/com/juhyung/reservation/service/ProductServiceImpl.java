@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.juhyung.reservation.domain.PageCriteria;
 import com.juhyung.reservation.domain.ProductVO;
+import com.juhyung.reservation.dto.DetailProduct;
 import com.juhyung.reservation.dto.ProductDTO;
 import com.juhyung.reservation.persistence.ProductDAO;
 
@@ -22,18 +23,19 @@ public class ProductServiceImpl implements ProductService{
 	}
 
 	@Override
-	public List<ProductVO> getListByCategory(Integer categoryId, PageCriteria pageCriteria) {
+	public List<ProductDTO> getListByCategory(Integer categoryId, PageCriteria pageCriteria) {
 		return productDao.selectListByCategory(categoryId, pageCriteria);
 	}
 
-	@Override
-	public ProductDTO detailProductById(Integer id) {
-		return productDao.selectDetailProductById(id);
-	}
 
 	@Override
 	public Integer getCountSaleProduct() {
 		return productDao.countOfSaleProduct();
+	}
+	
+	@Override
+	public Integer getCountSaleProductByCategory(int id) {
+		return productDao.countOfSaleProductByCategoryId(id);
 	}
 
 	@Override
@@ -41,4 +43,8 @@ public class ProductServiceImpl implements ProductService{
 		return productDao.selectLisPromotion();
 	}
 
+	@Override
+	public DetailProduct getDetailProductById(Integer id) {
+		return productDao.selectDetailProduct(id);
+	}
 }
