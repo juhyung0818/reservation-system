@@ -40,11 +40,11 @@ public class ProductServiceImpl implements ProductService{
 
 	@Override
 	public List<ProductVO> getListPromotion() {
-		return productDao.selectLisPromotion();
+		return productDao.selectListPromotion();
 	}
 
 	@Override
 	public DetailProduct getDetailProductById(Integer id) {
-		return productDao.selectDetailProduct(id);
+		return productDao.selectDetailProductById(id);
 	}
 }

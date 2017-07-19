@@ -25,7 +25,6 @@ public class TestProductDAO {
 		if(commentDao.selectCommentByProductId(2).size() > 0){
 			System.out.println("hello");
 		}
-	private ProductDAO productDao;
-	
+	}
 	
 }

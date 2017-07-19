@@ -28,7 +28,7 @@ public class ProductController {
 	}
 	
 	@GetMapping("/categories/{categoryId}/{page}")
-	public List<ProductVO> listByCategoryId(@PathVariable Integer categoryId, @PathVariable int page) throws Exception {
+	public List<ProductDTO> listByCategoryId(@PathVariable Integer categoryId, @PathVariable int page) throws Exception {
 		PageCriteria pageCriteria = new PageCriteria(page);
 		return productService.getListByCategory(categoryId, pageCriteria);
 	}

@@ -13,6 +13,6 @@ public interface ProductDAO {
 	public List<ProductDTO> selectListByCategory(Integer categoryId, PageCriteria pageCriteria);
 	public Integer countOfSaleProduct();
 	public Integer countOfSaleProductByCategoryId(int id);
-	public List<ProductVO> selectLisPromotion();
-	public DetailProduct selectDetailProduct(int id);
+	public List<ProductVO> selectListPromotion();
+	public DetailProduct selectDetailProductById(int id);
 }
