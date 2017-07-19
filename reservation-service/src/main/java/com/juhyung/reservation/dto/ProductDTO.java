@@ -17,6 +17,7 @@ public class ProductDTO {
 	public void setFileId(int fileId) {
 		this.fileId = fileId;
 	}
+	
 	public Integer getId() {
 		return id;
 	}

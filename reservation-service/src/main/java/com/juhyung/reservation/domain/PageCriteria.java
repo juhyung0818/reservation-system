@@ -12,6 +12,7 @@ public class PageCriteria {
 	
 	public PageCriteria(int page, int perNum){
 		this.perNum = perNum;
+		perNum = 10;
 		this.page = (page-1) * perNum;
 	}
 	

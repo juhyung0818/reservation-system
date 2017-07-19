@@ -19,8 +19,8 @@ public class HomeController {
 	public String categoryEdit() throws Exception {
 		return "index";
 	}
-	
-	@GetMapping("/detail/{id}")
+
+  @GetMapping("/detail/{id}")
 	public String readProductDeatil(@PathVariable int id, Model model){
 		model.addAttribute("id", id);
 		return "detail";

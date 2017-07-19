@@ -10,7 +10,6 @@ import javax.sql.DataSource;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-import org.springframework.jdbc.core.namedparam.ParsedSql;
 import org.springframework.stereotype.Repository;
 
 import com.juhyung.reservation.domain.PageCriteria;
@@ -48,6 +47,12 @@ public class ProductDAOImpl implements ProductDAO{
 	}
 
 	@Override
+	public ProductDTO selectDetailProductById(Integer id) {
+		Map<String, ?> params = Collections.singletonMap("id", id);
+		return jdbc.queryForObject(ProductSqls.SELECT_LIST_PAGE, params, rowMapperDTO);
+	}
+
+	@Override
 	public Integer countOfSaleProduct() {
 		Map<String, ?> params = Collections.emptyMap();
 		return jdbc.queryForObject(ProductSqls.SELECT_COUNT_OF_SALE_PRODUCT, params, Integer.class);
@@ -69,7 +74,5 @@ public class ProductDAOImpl implements ProductDAO{
 		Map<String, ?> params = Collections.singletonMap("id", id);
 		return jdbc.queryForObject(ProductSqls.SELECT_DETAIL_PRODUCT_BY_ID, params, detailRowMapper);
 	}
-
-
 
 }

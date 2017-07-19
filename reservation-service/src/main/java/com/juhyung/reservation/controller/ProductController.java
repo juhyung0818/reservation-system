@@ -28,7 +28,7 @@ public class ProductController {
 	}
 	
 	@GetMapping("/categories/{categoryId}/{page}")
-	public List<ProductDTO> listByCategoryId(@PathVariable Integer categoryId, @PathVariable int page) throws Exception {
+	public List<ProductVO> listByCategoryId(@PathVariable Integer categoryId, @PathVariable int page) throws Exception {
 		PageCriteria pageCriteria = new PageCriteria(page);
 		return productService.getListByCategory(categoryId, pageCriteria);
 	}
@@ -41,6 +41,9 @@ public class ProductController {
 	public Integer countProductByCategory(@PathVariable int id) throws Exception {
 		return productService.getCountSaleProductByCategory(id);
 	}
+	public Integer count() throws Exception {
+		return productService.getCountSaleProduct();
+	}
 
 	@GetMapping("/promotion")
 	public List<ProductVO> listPromotion() throws Exception {
@@ -51,4 +54,4 @@ public class ProductController {
 	public DetailProduct read(@PathVariable Integer id) throws Exception {
 		return productService.getDetailProductById(id);
 	}
-}	
+}
