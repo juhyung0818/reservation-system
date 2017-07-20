@@ -16,17 +16,13 @@ public class LoginInterceptor extends HandlerInterceptorAdapter{
 		
 		HttpSession session = request.getSession();
 		
-		if(session.getAttribute("login").equals("OK")){
+		if(session.getAttribute("login") != null){
 			System.out.println("login hello");
 		}else{
 			System.out.println("login XXXX");
 			response.sendRedirect("/login");
 		}
 		
-		System.out.println("pre handle");
 		return true;
 	}
-	
-
-		
 }

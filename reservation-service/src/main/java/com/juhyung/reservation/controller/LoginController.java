@@ -50,8 +50,8 @@ public class LoginController {
 		
 		int flag = userService.setUser(map) ;
 		if(flag == 1){
-			session.setAttribute("login", "OK");
-			return "myreservation";
+			session.setAttribute("login", map.get("id"));
+			return "redirect:/myreservation";
 		}else {
 			return "redirect:/login";
 		}
