@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("")
 public class HomeController {
 	
+
 	@GetMapping
 	public String mainpage() throws Exception {
 		return "mainpage";
@@ -35,5 +36,10 @@ public class HomeController {
 	@GetMapping("/touch")
 	public String touch(){
 		return "touch";
+	}
+	
+	@GetMapping("/myreservation")
+	public String myreservation() throws Exception {
+		return "myreservation";
 	}
 }

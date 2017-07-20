@@ -3,90 +3,105 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 
 <html>
-
 <head>
-
-<meta charset="EUC-KR">
-
-<title>mobile.html</title>
-
-<meta name="viewport" 
-
-	content="width=device-width,initial-scale=1.0,user-scalable=no"/>
-
-<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
-<script>
-
-	$(document).ready(function() {
-
-		$(document).bind('touchstart', function(e) {
-
-			$("#msg").html("터치가 시작되었어요.");
-
-			e.preventDefault();	//	이벤트취소
-
-		});
-
-		$(document).bind('touchmove', function(e) {
-
-			//	jQuery 이벤트 객체를 자바스크립트 표준 이벤트 객체로 바꾸기
-
-			//	이유는 jQuery 에서 자바 스크립트
-
-			var event = e.originalEvent;
-
-			$('#msg').html('touch 이벤트 중입니다.'); 
-
-			//	div에 터치한 좌표값 넣기
-
-			$('#msg').append('<div>' + event.touches[0].clientX + ',' +
-					event.touches[0].clientY + '</div>');
-			console.log( event.touches[0].screenX + ',' +
-					event.touches[0].screenY);
-			event.preventDefault();
-
-		});
-
-		$(document).bind('touchend', function(e) {
-
-			$("#msg").append("<div>터치이벤트가 종료되었어요</div>"); 
-
-		});
-
-	});
-
-</script>
-
+    <title>Mask, Layer popup</title>
+    <style>
+        .setDiv {
+            padding-top: 300px;
+            text-align: center;
+        }
+        .mask {
+            position:absolute;
+            left:0;
+            top:0;
+            z-index:10;
+            background-color:#000;
+            display:none;
+        }
+        .window {
+            display: none;
+            background-color: #ffffff;
+            height: 500px;
+            width: 80%;
+            z-index:10;
+        }
+    </style>
 </head>
-
 <body>
-
-<h2>모바일용 홈페이지 입니다.</h2>
-
-<!-- 
-
-		스마트폰의 브라우저 : 마우스 이벤트와는 별도로 터치 이벤트를 지원함 
-
-		touchstart : 터치가 시작될때
-
-		touchend : 터치가 종료될때 
-
-		touchmove : 터치한 상태로 이동할때 
-
-		touchenter : 터치한 요소의 경계외부에서 내부로 이동할때 
-
-		touchleave : 터치한 요소의 경계내부에서 외부로 이동할때 
-
- -->
-
-<div id="msg">
+<div>
+	<ul>
+		<li class="list_item">
+			<div>
+				<div class="review_area">
+					<div class="thumb_area">
+						<a href="#" class="thumb" title="이미지 크게 보기"> 
+							<img width="90" height="90" class="img_vertical_top" src="http://naverbooking.phinf.naver.net/20170306_3/1488772023601A4195_JPEG/image.jpg?type=f300_300" alt="리뷰이미지"> 
+						</a> 
+						  <div class="mask"></div>
+					    <div class="window">
+					        <input type="button" class="close" value="X"/>
+					        <img width="90" height="90" class="img_vertical_top" src="http://naverbooking.phinf.naver.net/20170306_3/1488772023601A4195_JPEG/image.jpg?type=f300_300" alt="리뷰이미지">
+					        
+					    </div>
+						<span class="img_count">1</span>
+					</div>
+					<h4 class="resoc_name">{{title}}</h4>
+					<p class="review">{{comment}}</p>
+				</div>
+			</div>
+		</li>
+	</ul>
 
 </div>
 
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+<script type="text/javascript">
+    function wrapWindowByMask(){
+        // 화면의 높이와 너비를 변수로 만듭니다.
+        var maskHeight = $(document).height();
+        var maskWidth = $(window).width();
+ 
+        // 마스크의 높이와 너비를 화면의 높이와 너비 변수로 설정합니다.
+        $('.mask').css({'width':maskWidth,'height':maskHeight});
+ 
+        // fade 애니메이션 : 1초 동안 검게 됐다가 80%의 불투명으로 변합니다.
+        $('.mask').fadeIn(1000);
+        $('.mask').fadeTo("slow",0.8);
+ 
+        // 레이어 팝업을 가운데로 띄우기 위해 화면의 높이와 너비의 가운데 값과 스크롤 값을 더하여 변수로 만듭니다.
+        var left = ( $(window).scrollLeft() + ( $(window).width() - $('.window').width()) / 2 );
+        var top = ( $(window).scrollTop() + ( $(window).height() - $('.window').height()) / 2 );
+ 
+        // css 스타일을 변경합니다.
+        $('.window').css({'left':left,'top':top, 'position':'absolute'});
+ 
+        // 레이어 팝업을 띄웁니다.
+        $('.window').show();
+    }
+ 
+    $(document).ready(function(){
+        // showMask를 클릭시 작동하며 검은 마스크 배경과 레이어 팝업을 띄웁니다.
+        $(".thumb").click(function(e){
+            // preventDefault는 href의 링크 기본 행동을 막는 기능입니다.
+            e.preventDefault();
+            wrapWindowByMask();
+        });
+ 
+        // 닫기(close)를 눌렀을 때 작동합니다.
+        $('.window .close').click(function (e) {
+            e.preventDefault();
+            $('.mask, .window').hide();
+        });
+ 
+        // 뒤 검은 마스크를 클릭시에도 모두 제거하도록 처리합니다.
+        $('.mask').click(function () {
+            $(this).hide();
+            $('.window').hide();
+        });
+    });
+</script>
 </body>
-
 </html>
-
 
 
 

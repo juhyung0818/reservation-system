@@ -5,8 +5,7 @@
 <html lang="ko">
 
 <head>
-	<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
-	<script src="/resources/js/node_modules/@egjs/component/dist/component.js"></script>
+	<script src="//code.jquery.com/jquery-3.2.1.min.js"></script>
 	<script src="/resources/js/handlebars-v4.0.10.js"></script>
     <meta charset="utf-8">
     <meta name="description" content="네이버 예약, 네이버 예약이 연동된 곳 어디서나 바로 예약하고, 네이버 예약 홈(나의예약)에서 모두 관리할 수 있습니다.">
@@ -154,10 +153,60 @@
         </div>
     </footer>
     <div id="photoviewer"></div>
+    
+    
+    
+   
     <script src="/resources/js/product.js"></script>
     <script src="/resources/js/comment.js"></script>
 	<script src="/resources/js/background.js"></script>
 	<script>
+	
+	var TouchHandler = (function(){
+		
+		init = function() {
+			var index = 0;
+			var startX=0, endX=0;
+			var sizeLimit = 414;
+			$("ul.visual_img").on("touchstart", function(event) {
+				/* alert("hi"); */
+				startX = event.changedTouches[0].pageX;
+				console.log(startX);
+			});
+
+			$("ul.visual_img").on("touchmove", function(event) {
+				console.log(event.changedTouches[0].pageX);
+			});
+
+			$("ul.visual_img").on("touchend", function(event) {
+				console.log(event);
+				endX = event.changedTouches[0].pageX;
+				console.log(endX);
+				if((endX - startX) > (sizeLimit*0.25)){
+					index--;
+					if(index < -1){
+						index = 0;
+						$(".visual_img").css("left", -828);
+					}
+					$(".visual_img").animate({"left": "+=" + 414}, "slow");	
+				}else if((endX - startX) < -(sizeLimit*0.25)){
+					index++;
+					if(1 < index){
+						index = 0;
+						$(".visual_img").css("left", 0);
+					}
+					$(".visual_img").animate({"left": "-=" + 414}, "slow");
+				}
+			});
+		};
+		return {
+			
+			init : init
+		}
+		
+	})();
+
+	
 	var DETAIL = (function(){
 		var id = '${id}';	
 		var sales_flag = false;
@@ -177,6 +226,7 @@
 			str = head + str + tail;
 			$(".visual_img").append(str);
 			$(".visual_img").css("left", "-414px");
+			TouchHandler.init();
 		};
 		draw_detail_product = function(detailProduct){
 			var source = $("#detail-product-template").html();
@@ -201,6 +251,8 @@
 				type : 'get',
 				url : '/files/images/' + id,
 				success : function(result) {
+					$(".num.off > span").append(result.length);
+					
 					callback(result);
 				}
 			});
@@ -262,7 +314,6 @@ $(document).on("click", ".btn_nxt", function(){
 	COMMENT.get_count(id);
 
 $(document).on("click", "li._detail > a", function(){
-	console.log("detail");
 	$('li._path > a').removeClass('active');
 	$('li._detail > a').addClass('active');
 	$('.detail_location').addClass('hide');
@@ -270,12 +321,12 @@ $(document).on("click", "li._detail > a", function(){
 });
 
 $(document).on("click", "li._path > a", function(){
-	console.log("path");
 	$('li._detail > a').removeClass('active');
 	$('li._path > a').addClass('active');
 	$('.detail_area_wrap').addClass('hide');
 	$('.detail_location').removeClass('hide');
 });
+
 
 function searchAddressToCoordinate(address) {
     naver.maps.Service.geocode({
@@ -296,57 +347,56 @@ function searchAddressToCoordinate(address) {
     });
 }
 searchAddressToCoordinate("인천 인중로 614");
-		$(document).ready(function() {
+
 		
-		$(".visual_img").on("touchstart", function(event) {
-
-			console.log("터치가 시작되었어요.");
-			event.preventDefault();	//	이벤트취소
-
-		});
-
-		$(".visual_img").on("touchmove", function(event) {
-
-			//	jQuery 이벤트 객체를 자바스크립트 표준 이벤트 객체로 바꾸기
-
-			//	이유는 jQuery 에서 자바 스크립트
-
-			var event = e.originalEvent;
-
-			console.log('touch 이벤트 중입니다.'); 
-
-			//	div에 터치한 좌표값 넣기
-
-			console.log(event.touches[0].clientX + ", " + event.touches[0].clientY );
-			event.preventDefault();
-
-		});
-
-		$(".visual_img").on('touchend', function(e) {
-
-			console.log("터치이벤트가 종료되었어요"); 
-
-		});
-	});
-
-
-var touchHandler = (function(){
-	
-	
-	
-	return {
-		
-		
-	}
-	
-});
-		
-	
-
+    function wrapWindowByMask(){
+        // 화면의 높이와 너비를 변수로 만듭니다.
+        var maskHeight = $(document).height();
+        var maskWidth = $(window).width();
+ 
+        // 마스크의 높이와 너비를 화면의 높이와 너비 변수로 설정합니다.
+        $('.mask').css({'width':maskWidth,'height':maskHeight});
+ 
+        // fade 애니메이션 : 1초 동안 검게 됐다가 80%의 불투명으로 변합니다.
+        $('.mask').fadeIn(1000);
+        $('.mask').fadeTo("slow",0.8);
+ 
+        // 레이어 팝업을 가운데로 띄우기 위해 화면의 높이와 너비의 가운데 값과 스크롤 값을 더하여 변수로 만듭니다.
+        var left = ( $(window).scrollLeft() + ( $(window).width() - $('.window').width()) / 2 );
+        var top = ( $(window).scrollTop() + ( $(window).height() - $('.window').height()) / 2 );
+ 
+        // css 스타일을 변경합니다.
+        $('.window').css({'left':left,'top':top, 'position':'absolute'});
+ 
+        // 레이어 팝업을 띄웁니다.
+        $('.window').show();
+    }
+ 
+    $(document).ready(function(){
+        // showMask를 클릭시 작동하며 검은 마스크 배경과 레이어 팝업을 띄웁니다.
+        $('.thumb').click(function(e){
+            // preventDefault는 href의 링크 기본 행동을 막는 기능입니다.
+            e.preventDefault();
+            wrapWindowByMask();
+        });
+ 
+        // 닫기(close)를 눌렀을 때 작동합니다.
+        $('.window .close').click(function (e) {
+            e.preventDefault();
+            $('.mask, .window').hide();
+        });
+ 
+        // 뒤 검은 마스크를 클릭시에도 모두 제거하도록 처리합니다.
+        $('.mask').click(function () {
+            $(this).hide();
+            $('.window').hide();
+        });
+    });
 </script>
+
 <script id="image-template" type="text/x-handlebars-template">
 <li class="item" style="width: 414px;"> 
-	<img alt="" class="img_thumb" src="http://localhost:8080/files/{{id}}">
+	<img alt="" class="img_thumb" src="/files/{{id}}">
 	<span class="img_bg"></span>
 	<div class="visual_txt">
 		<div class="visual_txt_inn">
@@ -416,7 +466,7 @@ var touchHandler = (function(){
 	<div>
 		<div class="review_area">
 			<div class="thumb_area">
-				<a href="#" class="thumb" title="이미지 크게 보기"> 
+				<a class="thumb" title="이미지 크게 보기"> 
 					<img width="90" height="90" class="img_vertical_top" src="http://naverbooking.phinf.naver.net/20170306_3/1488772023601A4195_JPEG/image.jpg?type=f300_300" alt="리뷰이미지"> 
 				</a> 
 				<span class="img_count">1</span>
@@ -434,5 +484,7 @@ var touchHandler = (function(){
 	</div>
 </li>
 </script>
+
+
 </body>
 </html>

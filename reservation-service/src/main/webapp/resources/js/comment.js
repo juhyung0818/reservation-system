@@ -42,7 +42,6 @@
 				type : 'get',
 				url : '/api/comments/count/' + id,
 				success : function(result) {
-					console.log(result);
 					callback(result);
 					if(result > 3){
 						$('.btn_review_more').removeClass('invisible');
@@ -55,7 +54,6 @@
 				type : 'get',
 				url : '/api/comments/score/' + id,
 				success : function(result) {
-					console.log(result);
 					callback(result);
 				}
 			});
