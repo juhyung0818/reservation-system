@@ -18,17 +18,14 @@ import com.juhyung.reservation.service.UserService;
 @RequestMapping("/login")
 public class LoginController {
 
-	/* NaverLoginBO */
-	private LoginBO loginBO;
-
 	private UserService userService;
+	private LoginBO loginBO;
 	
 	@Autowired
 	public LoginController(UserService userService) {
 		this.userService = userService;
 	}
 	
-	/* NaverLoginBO */
 	@Autowired
 	private void setNaverLoginBO(LoginBO loginBO){
 		this.loginBO = loginBO;
@@ -37,8 +34,6 @@ public class LoginController {
 	@GetMapping
 	public String login(HttpSession session) {
 		String naverAuthUrl = loginBO.getAuthorizationUrl(session);
-
-		/* 생성한 인증 URL을 View로 전달 */
 		return "redirect:" + naverAuthUrl;
 	}
 	
@@ -48,14 +43,15 @@ public class LoginController {
 		String apiResult = loginBO.getUserProfile(oauthToken);
 		Map<String, String> map = loginBO.getResultUserInfo(apiResult);
 		
-		int flag = userService.setUser(map) ;
-		if(flag == 1){
+		boolean flag = userService.setUser(map);
+		if(flag){
+			System.out.println(map.get("id"));
 			session.setAttribute("login", map.get("id"));
 			return "redirect:/myreservation";
-		}else {
+		}else{
 			return "redirect:/login";
 		}
-		
 	}
+		
 	
 }

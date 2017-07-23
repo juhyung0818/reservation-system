@@ -30,7 +30,7 @@
 		get_list = function (callback) {
 			$.ajax({
 				type : 'get',
-				url : '/api/category',
+				url : '/api/categories',
 				success:function(result) {
 					callback(result);
 				}
@@ -45,7 +45,7 @@
 		remove = function (view, id, callback) {
 			$.ajax({
 				type:'delete',
-				url:'/api/category/' + id,
+				url:'/api/categories/' + id,
 				success:function() {
 					callback(view, id);
 				}
@@ -61,7 +61,7 @@
 		modify = function (view, id, name, callback) {
 			$.ajax({
 				type:'put',
-				url:'/api/category/' + id,
+				url:'/api/categories/' + id,
 				contentType: "application/json; charset=utf-8",
 				data:name,
 				success:function() {
@@ -73,7 +73,7 @@
 		register = function (view, name, callback){
 			$.ajax({
 				type:'post',
-				url:'/api/category',
+				url:'/api/categories',
 				contentType: "application/json; charset=utf-8",
 				data:name,
 				success:function() {

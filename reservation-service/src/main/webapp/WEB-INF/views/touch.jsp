@@ -40,8 +40,7 @@
 						  <div class="mask"></div>
 					    <div class="window">
 					        <input type="button" class="close" value="X"/>
-					        <img width="90" height="90" class="img_vertical_top" src="http://naverbooking.phinf.naver.net/20170306_3/1488772023601A4195_JPEG/image.jpg?type=f300_300" alt="리뷰이미지">
-					        
+					        <img width="100%" height="100%" class="img_vertical_top" src="http://naverbooking.phinf.naver.net/20170306_3/1488772023601A4195_JPEG/image.jpg?type=f300_300" alt="리뷰이미지">
 					    </div>
 						<span class="img_count">1</span>
 					</div>

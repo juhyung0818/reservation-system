@@ -24,7 +24,6 @@ public class ImageDAOImpl implements ImageDAO{
 	private NamedParameterJdbcTemplate jdbc; 
     private RowMapper<Image> imageMapper = BeanPropertyRowMapper.newInstance(Image.class);
     private RowMapper<ProductImage> productImageMapper = BeanPropertyRowMapper.newInstance(ProductImage.class);
-    private RowMapper<Integer> imageIdMapper = BeanPropertyRowMapper.newInstance(Integer.class);
 	private SimpleJdbcInsert insertImage;
 	private SimpleJdbcInsert insertProductImage;
     
@@ -51,9 +50,9 @@ public class ImageDAOImpl implements ImageDAO{
 	}
 	
 	@Override
-	public List<Image> selectImageByProductId(Integer productId) {
-		Map<String, ?> params = Collections.singletonMap("product_id", productId);
-		return jdbc.query(ImgaeSqls.SELECT_IMAGE_BY_PRODUCT_ID, params, imageMapper);
+	public List<Integer> selectImagesByProductId(int id) {
+		Map<String, ?> params = Collections.singletonMap("product_id", id);
+		return jdbc.queryForList(ImgaeSqls.SELECT_IMAGES_BY_PRODUCT_ID, params, Integer.class);
 	}
 
 	@Override
@@ -68,6 +67,20 @@ public class ImageDAOImpl implements ImageDAO{
 		Map<String, ?> params = Collections.singletonMap("file_id", fileId);
 		return jdbc.queryForObject(ImgaeSqls.SELECT_IMAGE_BY_FILE, params, imageMapper);
 	}
+
+	@Override
+	public List<Integer> selectFilesByCommentId(int commentId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	
+//	//comment - file(image)
+//	@Override
+//	public List<Integer> selectFilesByCommentId(int commentId) {
+//		Map<String, ?> params = Collections.singletonMap("comment_id", commentId);
+//		return jdbc.query(ImgaeSqls.SELECT_FILES_BY_COMMENT_ID, params, Integer.class);
+//	}
 
 
 }

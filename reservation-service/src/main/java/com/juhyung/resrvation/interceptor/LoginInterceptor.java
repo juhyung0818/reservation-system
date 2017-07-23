@@ -1,4 +1,4 @@
-package com.juhyung.reservation.common;
+package com.juhyung.resrvation.interceptor;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -22,7 +22,6 @@ public class LoginInterceptor extends HandlerInterceptorAdapter{
 			System.out.println("login XXXX");
 			response.sendRedirect("/login");
 		}
-		
 		return true;
 	}
 }

@@ -22,7 +22,7 @@
                     <a href="naver.com" class="lnk_logo" title="네이버"> <span class="spr_bi ico_n_logo">네이버</span> </a>
                     <a href="/" class="lnk_logo" title="예약"> <span class="spr_bi ico_bk_logo">예약</span> </a>
                 </h1>
-                <a href="/login" class="btn_my"> <span title="내 예약">MY</span> </a>
+                <a href="/myreservation" class="btn_my"> <span title="내 예약">MY</span> </a>
             </header>
         </div>
         <hr>
@@ -45,7 +45,7 @@
                                 <!-- [D] 이전,다음 버튼을 클릭할때마다 캐러셀 형태로 순환 됨 --->
                                  <ul class="visual_img">
                                  <!-- 3'으로서 순환을 위한 임시 promotion -->
-			                         <li class="item" style="background-image: url(/files/3); width: 338px;">
+			                         <li class="item" style="background-image: url(/images/3); width: 338px;">
                                         <a href="#"> <span class="img_btm_border"></span> <span class="img_right_border"></span> <span class="img_bg_gra"></span>
                                             <div class="event_txt">
                                                 <h4 class="event_txt_tit">윈스턴</h4>
@@ -54,7 +54,7 @@
                                             </div>
                                         </a>
                                     </li>
-                                    <li class="item" style="background-image: url(/files/1); width: 338px;">
+                                    <li class="item" style="background-image: url(/images/1); width: 338px;">
                                         <a href="#"> <span class="img_btm_border"></span> <span class="img_right_border"></span> <span class="img_bg_gra"></span>
                                             <div class="event_txt">
                                                 <h4 class="event_txt_tit">강아지</h4>
@@ -63,7 +63,7 @@
                                             </div>
                                         </a>
                                     </li>
-                                    <li class="item" style="background-image: url(/files/2); width: 338px;">
+                                    <li class="item" style="background-image: url(/images/2); width: 338px;">
                                         <a href="#"> <span class="img_btm_border"></span> <span class="img_right_border"></span> <span class="img_bg_gra"></span>
                                             <div class="event_txt">
                                                 <h4 class="event_txt_tit">뮤지컬-김종욱찾기 네이버 예약</h4>
@@ -72,7 +72,7 @@
                                             </div>
                                         </a>
                                     </li>
-                                    <li class="item" style="background-image: url(/files/3); width: 338px;">
+                                    <li class="item" style="background-image: url(/images/3); width: 338px;">
                                         <a href="#"> <span class="img_btm_border"></span> <span class="img_right_border"></span> <span class="img_bg_gra"></span>
                                             <div class="event_txt">
                                                 <h4 class="event_txt_tit">윈스턴</h4>
@@ -82,7 +82,7 @@
                                         </a>
                                     </li>
                                     <!-- 1'으로서 순환을 위한 임시 promotion -->
-									<li class="item" style="background-image: url(/files/1); width: 338px;">
+									<li class="item" style="background-image: url(/images/1); width: 338px;">
                                         <a href="#"> <span class="img_btm_border"></span> <span class="img_right_border"></span> <span class="img_bg_gra"></span>
                                             <div class="event_txt">
                                                 <h4 class="event_txt_tit">강아지</h4>
@@ -135,14 +135,16 @@
     <script src="/resources/js/product.js"></script>
 	<script src="/resources/js/background.js"></script>
     <script>
+    Product.get();
+    
     $(function(){
 		$(document).on("click", "div.more", function(){
-			PRODUCT.click_more();
+			Product.click_more();
 		});
 	
 		$(document).scroll(function(){
 			if($(window).scrollTop() >= $(document).height() - $(window).height()){
-				PRODUCT.click_more();
+				Product.click_more();
 			}
 		})
 
@@ -150,7 +152,7 @@
 		$(".visual_img").css("left", "-338px");
 		UTIL.set_size(338);
 		UTIL.start();
-		$(document).on("click", "a.anchor", PRODUCT.move);
+		$(document).on("click", "a.anchor", Product.move);
 		$(document).on("click", "a.btn_pre_e", UTIL.previous);
 		$(document).on("click", "a.btn_nxt_e", UTIL.next);
     });
@@ -160,7 +162,7 @@
 		<a href="/detail/{{id}}" class="item_book">
 			<div class="item_preview">
 				<img alt={{name}} class="img_thumb"
-				src="/files/{{fileId}}">
+				src="/images/{{fileId}}">
 				<span class="img_border"></span>
 			</div>
 			<div class="event_txt">

@@ -21,7 +21,7 @@ import com.juhyung.reservation.domain.ProductImage;
 import com.juhyung.reservation.service.ImageService;
 
 @Controller
-@RequestMapping("/files")
+@RequestMapping("/images")
 public class ImageController {
 
 	@Autowired
@@ -77,9 +77,4 @@ public class ImageController {
 		}
 	}
 	
-	@GetMapping("/images/{id}")
-	public @ResponseBody List<Image> getImages(@PathVariable int id){
-		return imageService.getImages(id);
-	}
-
 }

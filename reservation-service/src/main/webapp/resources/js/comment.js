@@ -2,6 +2,7 @@
 	var COMMENT = (function(){
 		var count = 0;
 		var score = 0;
+		
 		draw_comment = function(comments, view){
 			var source = $("#comment-template").html();
 			var template = Handlebars.compile(source);

@@ -15,4 +15,8 @@ public interface ProductService {
 	public Integer getCountSaleProductByCategory(int id);
 	public List<ProductVO> getListPromotion();
 	public DetailProduct getDetailProductById(Integer id);
+	
+	//image
+	public List<Integer> getImagesByProduct(int id);
+	
 }

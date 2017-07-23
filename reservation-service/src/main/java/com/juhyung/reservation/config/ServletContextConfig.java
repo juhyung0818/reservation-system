@@ -13,11 +13,13 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
 
-import com.juhyung.reservation.common.LoginInterceptor;
+import com.juhyung.resrvation.interceptor.LoginInterceptor;
 
 @Configuration
 @EnableWebMvc
-@ComponentScan(basePackages = {"com.juhyung.reservation.controller"})
+@ComponentScan(basePackages = {"com.juhyung.reservation.controller",
+		"com.juhyung.resrvation.interceptor"
+})
 public class ServletContextConfig extends WebMvcConfigurerAdapter {
     @Bean
     public ViewResolver viewResolver() {
@@ -42,7 +44,7 @@ public class ServletContextConfig extends WebMvcConfigurerAdapter {
     
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
-		registry.addInterceptor(new LoginInterceptor()).addPathPatterns("/login/*", "/mainpage");
+		registry.addInterceptor(new LoginInterceptor()).addPathPatterns("/login/*", "/myreservation");
 		super.addInterceptors(registry);
 	}
 }

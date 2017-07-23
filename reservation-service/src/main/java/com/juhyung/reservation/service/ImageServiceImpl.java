@@ -65,10 +65,6 @@ public class ImageServiceImpl implements ImageService{
         }
 	}
 
-	@Override
-	public List<Image> getImages(int prouctId) {
-		return imageDao.selectImageByProductId(prouctId);
-	}
 
 	@Override
 	public Image getMainImageOfProduct(int productId) {
@@ -78,6 +74,17 @@ public class ImageServiceImpl implements ImageService{
 	@Override
 	public Image getImageByFileId(int fileId) {
 		return imageDao.selectImageByFileId(fileId);
+	}
+	
+	//comment -file(image)
+	@Override
+	public List<Integer> getFilesByCommentId(int commentId) {
+		List<Integer> files = imageDao.selectFilesByCommentId(commentId);
+		if(files.size() > 0){
+			return files;
+		}else{
+			return null; //exception
+		}
 	}
 	
 
