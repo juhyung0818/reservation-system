@@ -42,8 +42,14 @@ public class HomeController {
 		return "myreservation";
 	}
 	
-	@GetMapping("/resrve")
-	public String reserve() throws Exception {
+	@GetMapping("/reserve/{id}")
+	public String reserve(@PathVariable int id, Model model) throws Exception {
+		model.addAttribute("id", id);
 		return "reserve";
+	}
+	
+	@GetMapping("/naver")
+	public String naver() {
+		return "redirect:https://www.naver.com/";
 	}
 }

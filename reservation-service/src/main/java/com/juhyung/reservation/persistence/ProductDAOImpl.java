@@ -13,6 +13,7 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import com.juhyung.reservation.domain.PageCriteria;
+import com.juhyung.reservation.domain.Price;
 import com.juhyung.reservation.domain.ProductVO;
 import com.juhyung.reservation.dto.DetailProduct;
 import com.juhyung.reservation.dto.ProductDTO;
@@ -24,6 +25,7 @@ public class ProductDAOImpl implements ProductDAO{
     private RowMapper<ProductVO> rowMapperVO = BeanPropertyRowMapper.newInstance(ProductVO.class); 
     private RowMapper<ProductDTO> rowMapperDTO = BeanPropertyRowMapper.newInstance(ProductDTO.class);
     private RowMapper<DetailProduct> detailRowMapper = BeanPropertyRowMapper.newInstance(DetailProduct.class);
+    private RowMapper<Price> priceRowMapper = BeanPropertyRowMapper.newInstance(Price.class);
     
     public ProductDAOImpl(DataSource dataSource) {
         this.jdbc = new NamedParameterJdbcTemplate(dataSource); 
@@ -67,6 +69,12 @@ public class ProductDAOImpl implements ProductDAO{
 	public DetailProduct selectDetailProductById(int id) {
 		Map<String, ?> params = Collections.singletonMap("id", id);
 		return jdbc.queryForObject(ProductSqls.SELECT_DETAIL_PRODUCT_BY_ID, params, detailRowMapper);
+	}
+
+	@Override
+	public List<Price> selectPriceInfoByProduct(int id) {
+		Map<String, ?> params = Collections.singletonMap("id", id);
+		return jdbc.query(ProductSqls.SELECT_PRICE_BY_PRODUCT, params, priceRowMapper);
 	}
 
 }

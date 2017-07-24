@@ -36,8 +36,17 @@ public class UserDAOImpl implements UserDAO{
 	}
 
 	@Override
-	public int checkUserValid(String email) {
+	public Integer checkUserValid(String email) {
 		Map<String, ?> params = Collections.singletonMap("email", email);
-		return jdbc.queryForObject(UserSqls.CHECK_USER_VAILD, params, Integer.class);
+		System.out.println(email);
+		int id = jdbc.queryForObject(UserSqls.CHECK_USER_VAILD, params, Integer.class);
+		System.out.println(id);
+		return id;
+	}
+
+	@Override
+	public User selectUserById(int id) {
+		Map<String, ?> params = Collections.singletonMap("id", id);
+		return jdbc.queryForObject(UserSqls.SELECT_USER_INFO_BY_ID, params, userRowMapper);
 	}
 }

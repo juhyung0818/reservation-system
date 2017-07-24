@@ -63,6 +63,7 @@ var Product = (function() {
 			}
 		});
 	};
+	
 	// public
 	return {
 		get : function() {

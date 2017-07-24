@@ -67,11 +67,6 @@ public class ImageServiceImpl implements ImageService{
 
 
 	@Override
-	public Image getMainImageOfProduct(int productId) {
-		return imageDao.selectMainImageOfProduct(productId);
-	}
-
-	@Override
 	public Image getImageByFileId(int fileId) {
 		return imageDao.selectImageByFileId(fileId);
 	}
@@ -86,6 +81,6 @@ public class ImageServiceImpl implements ImageService{
 			return null; //exception
 		}
 	}
-	
+
 
 }

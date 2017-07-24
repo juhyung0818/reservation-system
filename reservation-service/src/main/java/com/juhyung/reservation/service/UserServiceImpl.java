@@ -19,22 +19,23 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public boolean setUser(Map<String, String> userMap) {
+	public int setUser(Map<String, String> userMap) {
 		User user = new User();
 		String email = userMap.get("email");
-		if (userDao.checkUserValid(email) == 0) {
+		Integer id = userDao.checkUserValid(email);
+		if (id == null) {
 			user.setEmail(email);
 			user.setUsername(userMap.get("name"));
 			user.setSnsId(email.substring(0, 4) + "****");
 			user.setAdminFlag(0);
-			if (userDao.insertUser(user) > 0) {
-				System.out.println("success"); //
-				return true;
-			} else {
-				return false; // error 발생
-			}
+			return userDao.insertUser(user);
 		}
-		return true;
+		return id;
+	}
+
+	@Override
+	public User getUserById(int id) {
+		return userDao.selectUserById(id);
 	}
 
 }

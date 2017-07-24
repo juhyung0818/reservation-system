@@ -12,7 +12,7 @@ public interface ImageDAO {
 	
 	public List<Integer> selectImagesByProductId(int id);
 	
-	public Image selectMainImageOfProduct(Integer productId);
+	public Integer selectMainImageOfProduct(Integer productId);
 	
 	public Image selectImageByFileId(Integer fileId);
 	

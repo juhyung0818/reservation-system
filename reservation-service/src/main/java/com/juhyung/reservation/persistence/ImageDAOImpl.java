@@ -56,9 +56,9 @@ public class ImageDAOImpl implements ImageDAO{
 	}
 
 	@Override
-	public Image selectMainImageOfProduct(Integer productId) {
+	public Integer selectMainImageOfProduct(Integer productId) {
 		Map<String, ?> params = Collections.singletonMap("product_id", productId);
-		return jdbc.queryForObject(ImgaeSqls.SELECT_MAIN_IMAGE_OF_PRODUCT, params, imageMapper);	
+		return jdbc.queryForObject(ImgaeSqls.SELECT_MAIN_IMAGE_OF_PRODUCT, params, Integer.class);	
 	}
 
 

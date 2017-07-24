@@ -5,7 +5,7 @@
 <html lang="ko">
 
 <head>
-	<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+	<script src="/resources/js/node_modules/jquery/dist/jquery.js"></script>
 	<script src="/resources/js/node_modules/@egjs/component/dist/component.js"></script>
 	<script src="/resources/js/handlebars-v4.0.10.js"></script>
     <meta charset="utf-8">
@@ -27,8 +27,8 @@
         <div class="header fade">
             <header class="header_tit">
                 <h1 class="logo">
-                    <a href="#" class="lnk_logo" title="네이버"> <span class="spr_bi ico_n_logo">네이버</span> </a>
-                    <a href="#" class="lnk_logo" title="예약"> <span class="spr_bi ico_bk_logo">예약</span> </a>
+                    <a href="/naver" class="lnk_logo" title="네이버"> <span class="spr_bi ico_n_logo">네이버</span> </a>
+                    <a href="/" class="lnk_logo" title="예약"> <span class="spr_bi ico_bk_logo">예약</span> </a>
                 </h1>
                 <a href="/myreservation" class="btn_my"> <span title="내 예약">MY</span> </a>
             </header>
@@ -38,8 +38,8 @@
                 <div class="section_visual">
                     <header>
                         <h1 class="logo">
-                            <a href="#" class="lnk_logo" title="네이버"> <span class="spr_bi ico_n_logo">네이버</span> </a>
-                            <a href="#" class="lnk_logo" title="예약"> <span class="spr_bi ico_bk_logo">예약</span> </a>
+                            <a href="naver.com" class="lnk_logo" title="네이버"> <span class="spr_bi ico_n_logo">네이버</span> </a>
+                            <a href="/" class="lnk_logo" title="예약"> <span class="spr_bi ico_bk_logo">예약</span> </a>
                         </h1>
                         <a href="/myreservation" class="btn_my"> <span title="내 예약">MY</span> </a>
                     </header>
@@ -54,7 +54,11 @@
                 </div>
                 <div class="section_info">
                 </div>
-                <div class="section_btn"> <button type="button" class="bk_btn"> <i class="fn fn-nbooking-calender2"></i> <span>예매하기</span> </button> </div>
+                <a href="/reserve/${id}">
+	                <div class="section_btn"> <button type="button" class="bk_btn"> 
+	                	<i class="fn fn-nbooking-calender2"></i> <span>예매하기</span> 
+	                </button> </div>
+                </a>
                 <div class="section_review_list">
                     <div class="review_box">
                         <h3 class="title_h3">예매자 한줄평</h3>
@@ -154,83 +158,20 @@
         </div>
     </footer>
     <div id="photoviewer"></div>
+    <script src="/resources/js/detail.js"></script>
     <script src="/resources/js/product.js"></script>
     <script src="/resources/js/comment.js"></script>
 	<script src="/resources/js/background.js"></script>
 	<script>
-	var DETAIL = (function(){
-		var id = '${id}';	
-		var sales_flag = false;
-		
-		draw_image = function(image){
-			var source = $("#image-template").html();
-			var template = Handlebars.compile(source);
-			var str;
-			var head;
-			var tail;
-			for (var index in image) {
-				if(index == 0){
-					tail = template(image[index]);
-				}
-				head = template(image[index]);
-				str += head;
-			}
-			str = head + str + tail;
-			$(".visual_img").append(str);
-			$(".visual_img").css("left", "-414px");
-		};
-		draw_detail_product = function(detailProduct){
-			var source = $("#detail-product-template").html();
-			var template = Handlebars.compile(source);
-			var str;
-			str = template(detailProduct);
-			$('.section_info').append(str);
-		};
-		get_detail_product = function (callback) {
-			$.ajax({
-				type : 'get',
-				url : '/api/products/' + id,
-				success : function(result) {
-					sales_flag = result.sales_flag;
-					callback(result);
-					get_image_list(id, draw_image);
-				}
-			});
-		};	
-		get_image_list = function (id, callback) {
-			$.ajax({
-				type : 'get',
-				url : '/api/products/' + id + '/images',
-				success : function(result) {
-					callback(result);
-				}
-			});
-		};	
-		return{
-			get: function() {
-				get_detail_product(draw_detail_product);
-			},
-			get_image: function() {
-				get_image_list(draw_image);
-			},
-			get_id: function() {
-				return id;
-			},
-			get_sales_flag: function(){
-				return sales_flag;
-			}
-		}
-	})();
+	
 
-DETAIL.get();
-Product.set_count(DETAIL.get_id());
+Detail.get('${id}');
+Product.set_count('${id}');
 UTIL.set_size(414);
 
 $(document).on("click", ".bk_btn", check);
 function check(){
-	if(DETAIL.get_sales_flag() == 0){
-		alert("success");
-	}else{
+	if(Detail.get_sales_flag() == 0){
 		alert("fail");
 	}
 }

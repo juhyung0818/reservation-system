@@ -29,4 +29,7 @@ public class ProductSqls {
 	final static String SELECT_DETAIL_PRODUCT_BY_ID = 
 			"select * from product as p, product_detail as pd, display_info as di "
 			+ "where di.product_id =p.id and pd.product_id = p.id and p.id= :id";
+	
+	final static String SELECT_PRICE_BY_PRODUCT =
+			"select price_type, price, discount_rate from product_price where product_id= :id";
 }

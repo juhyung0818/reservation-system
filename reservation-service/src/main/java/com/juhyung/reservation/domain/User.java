@@ -5,9 +5,16 @@ public class User {
 	private Integer id;
 	private String username;
 	private String email;
+	private String tel;
 	private String snsId;
 	private int adminFlag;
 	
+	public String getTel() {
+		return tel;
+	}
+	public void setTel(String tel) {
+		this.tel = tel;
+	}
 	public Integer getId() {
 		return id;
 	}
@@ -40,7 +47,7 @@ public class User {
 	}
 	@Override
 	public String toString() {
-		return "User [id=" + id + ", username=" + username + ", email=" + email + ", snsId=" + snsId + ", adminFlag="
-				+ adminFlag + "]";
+		return "User [id=" + id + ", username=" + username + ", email=" + email + ", tel=" + tel + ", snsId=" + snsId
+				+ ", adminFlag=" + adminFlag + "]";
 	}
 }

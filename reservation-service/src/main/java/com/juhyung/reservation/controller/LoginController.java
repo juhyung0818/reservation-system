@@ -6,6 +6,7 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -38,20 +39,17 @@ public class LoginController {
 	}
 	
 	@GetMapping("/check")
-	public String callback(@RequestParam String code, @RequestParam String state, HttpSession session) throws Exception {
+	public String callback(@RequestParam String code, @RequestParam String state, HttpSession session, Model model) throws Exception {
 		OAuth2AccessToken oauthToken = loginBO.getAccessToken(session, code, state);
 		String apiResult = loginBO.getUserProfile(oauthToken);
 		Map<String, String> map = loginBO.getResultUserInfo(apiResult);
 		
-		boolean flag = userService.setUser(map);
-		if(flag){
-			System.out.println(map.get("id"));
-			session.setAttribute("login", map.get("id"));
+		int id = userService.setUser(map);
+		if(id > 0){
+			session.setAttribute("login", id);
 			return "redirect:/myreservation";
 		}else{
-			return "redirect:/login";
+			return "/login";
 		}
 	}
-		
-	
 }

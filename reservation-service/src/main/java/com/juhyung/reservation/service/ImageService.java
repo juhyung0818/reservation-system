@@ -13,7 +13,6 @@ public interface ImageService {
 	public static final String BASE_DIR = File.separator + "Users" + File.separator + "YJH" + File.separator + "Desktop" + File.separator;
 	
 	public void createImage(String title, MultipartFile[] files, ProductImage productImage);
-	public Image getMainImageOfProduct(int productId);
 	public Image getImageByFileId(int fileId);
 
 	//comment- file(image)
